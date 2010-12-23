@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+   <title></title>
+   <link  href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,300,400,700" rel="stylesheet" type="text/css" >
+   <style type="text/css">
+   html,body{font-family: 'Yanone Kaffeesatz', serif; font-size:26px;}
+   .code {background:none repeat scroll 0 0 #F7F7F7;border-bottom:1px solid #EBEBEB;border-top:1px solid #EBEBEB;padding:10px;}
+   a{color: #393}
+   </style>
+   <script type="text/javascript">
+</script>
+</head>
+<body>
+<h1>Analyzing the FIFA2010 worldcup with Guardian Data and YQL</h1>
+<p>The Guardian once again involved in committing a data awesome! As before, the UK newspaper graced developers with a really cool piece of information published on the web: <a href="http://www.guardian.co.uk/news/datablog/2010/jul/09/world-cup-2010-statistics">all the World cup 2010 statistics as an Excel Sheet</a></p>
+<p>Now, the easiest way the play with this data is to use YQL, so I simply took a copy of the information and shared it as a CSV document on Google Docs. That way I can use it in YQL:</p>
+<div class="code">
+<div><strong>Code</strong></div>
+select * from csv where url="http://spreadsheets.google.com/pub?key=0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc&single=true&gid=1&x=1&output=csv" and columns="surname,team,position,time,shots,passes,tackles,saves"
+</div>
+<div>You can <a href="http://developer.yahoo.com/yql/console/?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22">Try this out in the console</a> and <a href="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22&diagnostics=true">see the results here</a></div>
+<p>Using YQL to filter and sort this, you can do some interesting searches on that information. For example:</p>
+<h2>What were the German midfield Players?</h2>
+<div class="code">
+<div><strong>Code</strong></div>
+select * from csv where url="http://spreadsheets.google.com/pub?
+key=0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc&single=true&gid=1&x=1&
+output=csv" and columns="surname,team,position,time,shots,passes,tackles,saves"
+and team="Germany" and position="Midfielder"
+</div>
+<div>You can <a href="http://developer.yahoo.com/yql/console/?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20and%20team%3D%22Germany%22%20and%20position%3D%22Midfielder%22">Try this out in the console</a> and <a href="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20and%20team%3D%22Germany%22%20and%20position%3D%22Midfielder%22&diagnostics=true">see the results here</a></div>
+
+<p>Using sort() and reverse() you can do rankings. For example:</p>
+<h2>Who was the goalkeeper with the most saves?</h2>
+<div class="code">
+<div><strong>Code</strong></div>
+select * from csv where url="http://spreadsheets.google.com/pub?
+key=0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc&single=true&gid=1&x=1&
+output=csv" and
+columns="surname,team,position,time,shots,passes,tackles,saves"
+and position="Goalkeeper" | sort(field="saves") | reverse()
+</div>
+<div>You can <a href="http://developer.yahoo.com/yql/console/?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20and%20position%3D%22Goalkeeper%22%20|%20sort%28field%3D%22saves%22%29%20|%20reverse%28%29">Try this out in the console</a> and <a href="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20and%20position%3D%22Goalkeeper%22%20%7C%20sort(field%3D%22saves%22)%20%7C%20reverse()&diagnostics=true">see the results here</a></div>
+
+
+<h2>Which was the player that spent most time on the pitch?</h2>
+<div class="code">
+<div><strong>Code</strong></div>
+select * from csv where url="http://spreadsheets.google.com/pub?
+key=0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc&single=true&gid=1&
+output=csv" and
+columns="surname,team,position,time,shots,passes,tackles,saves"
+| sort(field="time") | reverse()
+</div>
+<div>You can <a href="http://developer.yahoo.com/yql/console/?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20|%20sort%28field%3D%22time%22%29%20|%20reverse%28%29">Try this out in the console</a> and <a href="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20%7C%20sort(field%3D%22time%22)%20%7C%20reverse()&diagnostics=true">see the results here</a></div>
+
+<h2>Who were the players who were the least on the pitch in the German and Brazilian teams?</h2>
+<div class="code">
+<div><strong>Code</strong></div>
+select * from csv where url="http://spreadsheets.google.com/pub?
+key=0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc&single=true&gid=1&x=1&
+output=csv" and columns="surname,team,position,time,shots,passes,tackles,saves"
+and team in ("Germany","Brazil") | sort(field="time")
+</div>
+<div>You can <a href="http://developer.yahoo.com/yql/console/?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20and%20team%20in%20%28%22Germany%22%2C%22Brazil%22%29%20|%20sort%28field%3D%22time%22%29">Try this out in the console</a> and <a href="http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20csv%20where%20url%3D%22http%3A%2F%2Fspreadsheets.google.com%2Fpub%3Fkey%3D0AhphLklK1Ve4dEdrWC1YcjVKN0ZRbTlHQUhaWXBKdGc%26single%3Dtrue%26gid%3D1%26x%3D1%26output%3Dcsv%22%20and%20columns%3D%22surname%2Cteam%2Cposition%2Ctime%2Cshots%2Cpasses%2Ctackles%2Csaves%22%20and%20team%20in%20(%22Germany%22%2C%22Brazil%22)%20%7C%20sort(field%3D%22time%22)&diagnostics=true">see the results here</a></div>
+
+<p>Using the CSV output and YQL you can do all kind of cool things with that data - as YQL also releases it as JSON it makes it easy to create interactive interfaces and visualizations, too - why don't you have a go?</p>
+</body>
+</html>
+

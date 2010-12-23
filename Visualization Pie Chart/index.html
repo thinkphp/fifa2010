@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+   <title>FIFA 2010 Worldcup Goals</title>
+   <style type="text/css">
+   </style>
+   <script src="http://www.google.com/jsapi?key=ABQIAAAA1XbMiDxx_BTCY2_FkPh06RRaGTYH6UMl8mADNa0YKuWNNa8VNxQEerTAUcfkyrr6OwBovxn7TDAH5Q"></script>
+   <script type="text/javascript">google.load("visualization", "1",{packages: ["corechart"]});</script>                                 
+</head>
+<body>
+<div id="chart"></div>
+<script type="text/javascript" src="get-goals.php"></script>
+<script type="text/javascript">
+(function(){
+  var output = document.getElementById('chart');
+  var c = [] , g = [];
+  var data = fifa.data.query.results.row;
+  var countries = data[0];
+  var goals = data[2]; 
+      delete countries['col0'];
+      delete goals['col0'];
+      for(var i in countries) {
+              c.push(countries[i]); 
+      }
+      for(var i in goals) {
+              g.push(parseInt(goals[i])); 
+      }
+      drawChart(c,g); 
+      function drawChart(c,g) {
+               var data = new google.visualization.DataTable();
+                   data.addColumn('string','Team');
+                   data.addColumn('number','Goals');
+               var n = c.length;
+                   data.addRows(n);
+               for(var i=0;i<n;i++) {
+                  data.setValue(i,0,c[i]);
+                  data.setValue(i,1,g[i]);
+               }
+               var chart = new google.visualization.PieChart(document.getElementById('chart'));
+                   chart.draw(data,{width: 800,height: 500,title: 'FIFA 2010 Worldcup Goals',titleFontSize: 34}); 
+      } 
+})();
+</script>
+</body>
+</html>

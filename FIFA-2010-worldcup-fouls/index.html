@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
+<html> 
+<head> 
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <title>Generating charts from accessible data tables</title> 
+   <link rel="stylesheet" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css" type="text/css"> 
+   <link rel="stylesheet" href="http://yui.yahooapis.com/2.7.0/build/base/base.css" type="text/css">
+   <link rel="stylesheet" href="pagestyle.css" type="text/css">
+   <script src="http://www.google.com/jsapi?key=ABQIAAAA1XbMiDxx_BTCY2_FkPh06RRaGTYH6UMl8mADNa0YKuWNNa8VNxQEerTAUcfkyrr6OwBovxn7TDAH5Q"></script>
+   <script type="text/javascript">google.load("mootools", "1.2.4");</script>  
+   <script type="text/javascript" src="table2chart.js"></script>  
+</head> 
+<body> 
+   <div id="doc" class="yui-t7"> 
+    <div id="hd" role="banner"><h1>Analyzing FIFA WorldCup 2010 Data Fouls</h1></div> 
+    <div id="bd" role="main"> 
+     <div class="yui-g" id="results"> 
+     Loading...
+     </div>
+    </div><!-- end bd --> 
+ <div id="ft"><p>Created by @<a href="http://twitter.com/thinkphp">thinkphp</a> using <a href="http://code.google.com/apis/chart/index.html">Google Chart API</a>, <a href="http://www.guardian.co.uk/news/datablog/2010/jul/09/world-cup-2010-statistics">Guardian Data World Cup 2010 statistics</a>, <a href="table2chart.js">table2chart.js</a> and <a href="http://developer.yahoo.com/yql/console">YQL</a></p></div></div>
+</div><!--end doc -->
+<script type="text/javascript" src="get-fouls.php"></script>
+<script type="text/javascript">
+(function(){
+  var output = document.getElementById('results');
+  var c = [] , f = [];
+  var data = fifa.data.query.results.row;
+  var countries = data[0];
+  var fouls = data[data.length-3]; 
+      delete countries['col0'];
+      delete fouls['col0'];
+      for(var i in countries) {
+              c.push(countries[i]); 
+      }
+      for(var i in fouls) {
+              f.push(fouls[i]); 
+      }
+      createTable(c,f);
+      function createTable(c,f) {
+           var n = c.length;
+           var table = '<table class="toChart size700x300 color820d3a">';
+               table += '<thead><th>Team</th><th>Fouls</th></thead><tbody>';
+               for(var i=0;i<n;i++) {
+                     table += '<tr><td>'+c[i]+'</td><td>'+f[i]+'</td></tr>';
+               }
+               table += '</tbody></table>';              
+           output.innerHTML = table; 
+      };
+      new Table2Chart();      
+})();
+</script>
+</body> 
+</html> 
